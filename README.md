@@ -15,7 +15,7 @@ variables, no services.
 
 ```bash
 git clone <REPO_URL>
-cd greptile
+cd passcode-entry
 npm install
 npm run dev
 ```
@@ -105,8 +105,7 @@ identically to the fill it replaces. The box subpath is untouched.
 
 Four of these are driven through `useAnimationControls` rather than an
 `animate` prop — the digit pop, the loading wave, the mark's rotation, and the
-tick. The
-field sits inside an `AnimatePresence` with `initial={false}`, which suppresses
+tick. The field sits inside an `AnimatePresence` with `initial={false}`, which suppresses
 a child's *first* animation, whether it is written as a target or as keyframes.
 Controls are not subject to that, so they are the reliable way to start motion
 on a freshly mounted child here.
@@ -160,9 +159,8 @@ disagree.
 ### On the added magnitudes
 
 A spring says *how* a value travels but not *how far*, so the magnitudes the
-five moments need (entry scale, pulse trough, success scale and lift) sit
-beside the springs under `AMPLITUDE`. The alternative was hardcoding them in
-components.
+moments need (entry scale, pulse trough, success scale and lift) sit beside the
+springs under `AMPLITUDE`. The alternative was hardcoding them in components.
 
 ### Decisions not covered by the brief
 
@@ -207,7 +205,8 @@ the page across all states.
 All values live as custom properties in [`app/globals.css`](app/globals.css)
 and are consumed by
 [`PasscodeEntry.module.css`](components/PasscodeEntry/PasscodeEntry.module.css).
-No Tailwind, no animation library.
+No Tailwind. Motion values live separately, in
+[`motion.ts`](components/PasscodeEntry/motion.ts).
 
 ### Colour styles
 
