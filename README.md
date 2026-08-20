@@ -56,10 +56,22 @@ the cells stay presentational.
 | the fourth digit submits on its own | `land()`, inside the same update that writes the digit |
 | typing advances focus | `insert` action |
 | pasting fills from the focused cell on | `handlePaste` → `insert` |
+| clicking a cell focuses that cell | `handlePointerDown` → `focusCell` |
 | Backspace/Delete clears the current cell | `erase` action |
 | …and steps back when it is already empty | `erase` action |
 | holding clears backwards continuously | falls out of the two `erase` branches under the browser's key auto-repeat |
 | passcode `1234`, ~2s verify | `passcode` / `verifyDelayMs` props |
+
+**Focus follows the click**, whatever is already typed — click the second cell
+of `1111` and type `2` to get `1211` without erasing the two digits after it.
+The input is one transparent box over the whole field, so the cell is derived
+from where in it the pointer landed rather than from per-cell inputs; focus
+stays owned by a single element.
+
+Because any cell can be picked, cells can be filled out of order and the value
+can have holes (`_ 2 _ 1`). `PasscodeEntry`'s `value` therefore accepts an
+array as well as a string — a string cannot express a gap. Submission still
+requires every cell filled, so a gapped code simply does not submit.
 
 State lives in a `useReducer` rather than separate `useState` calls so that a
 held Backspace — which fires keydown faster than React re-renders — always
@@ -187,7 +199,7 @@ These are the places the rules ran out. All are one-liners to change:
 ```tsx
 <PasscodeEntry
   status="filling"      // "empty" | "filling" | "submitting" | "authenticated"
-  value="122"           // digits to display
+  value="122"           // string, or ["1","","2",""] when cells have gaps
   length={4}            // number of cells
   activeIndex={2}       // cell carrying the highlight; null hides it
   label="Verifying..."  // overrides the status row copy

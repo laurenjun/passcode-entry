@@ -30,8 +30,12 @@ export type PasscodeStatus =
 export interface PasscodeEntryProps {
   /** Which visual state to render. Drives every other default. */
   status?: PasscodeStatus;
-  /** Digits to display, e.g. "122". Characters past `length` are ignored. */
-  value?: string;
+  /**
+   * Digits to display. A string for contiguous codes ("122"), or an array
+   * when cells can be filled out of order — ["1", "", "3", ""] leaves a gap
+   * that a string could not express.
+   */
+  value?: string | readonly string[];
   /** Number of cells. */
   length?: number;
   /**
@@ -216,11 +220,15 @@ export function PasscodeEntry({
   const digits = Array.from({ length }, (_, i) => value[i] ?? "");
   const disabled = status === "submitting";
 
+  /* Counted rather than taken from `value.length`, which would be the cell
+     count rather than the digit count when an array with gaps is passed. */
+  const filled = digits.filter(Boolean).length;
+
   const resolvedActive =
     activeIndex !== undefined
       ? activeIndex
       : status === "filling"
-        ? Math.min(Math.max(value.length - 1, 0), length - 1)
+        ? Math.min(Math.max(filled - 1, 0), length - 1)
         : null;
 
   const statusText = label ?? DEFAULT_LABELS[status];

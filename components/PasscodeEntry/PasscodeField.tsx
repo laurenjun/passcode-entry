@@ -20,6 +20,8 @@ type Action =
   /** One or more digits arriving at once: a keypress, a paste, a soft key. */
   | { type: "insert"; digits: string }
   | { type: "erase" }
+  /** Clicking a cell focuses that cell, whatever is already typed. */
+  | { type: "focusCell"; index: number }
   | { type: "submit" }
   | { type: "settle"; ok: boolean }
   | { type: "recover" };
@@ -60,6 +62,16 @@ function makeReducer({ autoSubmit }: ReducerConfig) {
         }
         if (cursor === state.activeIndex) return state;
         return land(state, digits, cursor);
+      }
+
+      case "focusCell": {
+        if (state.phase !== "entry") return state;
+        const index = Math.min(
+          Math.max(action.index, 0),
+          state.digits.length - 1,
+        );
+        if (index === state.activeIndex) return state;
+        return { ...state, activeIndex: index };
       }
 
       /*
@@ -190,6 +202,19 @@ export function PasscodeField({
     }
   }
 
+  /*
+   * Focus follows the click. The input is one transparent box over the whole
+   * field, so the cell is worked out from where in it the pointer landed —
+   * which keeps a single element owning focus while still letting any cell be
+   * picked directly.
+   */
+  function handlePointerDown(event: React.PointerEvent<HTMLInputElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    if (rect.width === 0) return;
+    const index = Math.floor(((event.clientX - rect.left) / rect.width) * length);
+    dispatch({ type: "focusCell", index });
+  }
+
   /** Paste fills from the focused cell onward; anything non-numeric is dropped. */
   function handlePaste(event: React.ClipboardEvent<HTMLInputElement>) {
     event.preventDefault();
@@ -240,6 +265,7 @@ export function PasscodeField({
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
+          onPointerDown={handlePointerDown}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
         />
@@ -247,7 +273,7 @@ export function PasscodeField({
 
       <PasscodeEntry
         status={status}
-        value={entered}
+        value={state.digits}
         length={length}
         activeIndex={activeIndex}
         shakeToken={state.shakeToken}
