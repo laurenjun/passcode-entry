@@ -64,6 +64,9 @@ the cells stay presentational.
 
 **Focus follows the click**, whatever is already typed — click the second cell
 of `1111` and type `2` to get `1211` without erasing the two digits after it.
+An entirely empty field is the exception: it always focuses the first cell,
+wherever the click landed, since there is nothing to correct yet and entry
+should start at the beginning rather than leave a hole in front of it.
 The input is one transparent box over the whole field, so the cell is derived
 from where in it the pointer landed rather than from per-cell inputs; focus
 stays owned by a single element.

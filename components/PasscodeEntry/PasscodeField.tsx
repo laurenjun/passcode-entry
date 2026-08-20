@@ -66,10 +66,13 @@ function makeReducer({ autoSubmit }: ReducerConfig) {
 
       case "focusCell": {
         if (state.phase !== "entry") return state;
-        const index = Math.min(
-          Math.max(action.index, 0),
-          state.digits.length - 1,
-        );
+        /* An entirely empty field always starts at the first cell, wherever
+           the click landed — there is nothing to correct yet, so entry should
+           begin at the beginning rather than leave a hole in front of it. */
+        const empty = state.digits.every((d) => d === "");
+        const index = empty
+          ? 0
+          : Math.min(Math.max(action.index, 0), state.digits.length - 1);
         if (index === state.activeIndex) return state;
         return { ...state, activeIndex: index };
       }
