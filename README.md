@@ -4,9 +4,8 @@ Next.js + TypeScript recreation of the four passcode-entry states from the
 Figma source (*Takehome Design Engineering*), combined into one live component
 with keyboard interaction and motion.
 
-`PasscodeEntry` stays purely presentational — every state is still forced
-through props, so the four artboards can be compared against the design.
-`PasscodeField` wraps it with the state machine.
+`PasscodeEntry` stays purely presentational — every state is forced through
+props. `PasscodeField` wraps it with the state machine.
 
 ## Run locally
 
@@ -29,16 +28,12 @@ Then open <http://localhost:3000>.
 | `npm start` | serve the production build |
 | `npm run typecheck` | `tsc --noEmit` |
 
-### Where to look
+`/` is the only route: the live component, centred on the page. The field
+autofocuses on load. The passcode is **1234** — type it and it submits on the
+fourth digit; type anything else to see the rejection. Enter also submits.
 
-| Route | |
-| --- | --- |
-| `/` | the live component — click it, type digits. The passcode is **1234**. |
-| `/review` | all four states in Figma order as true 1512 × 982 artboards, with a zoom control |
-| `/artboard/empty` · `filling` · `submitting` · `authenticated` | one frame on its own, chrome-free, for 1:1 comparison against a Figma export |
-
-The field autofocuses on load. Type `1234` and it submits on the fourth digit;
-type anything else to see the rejection. Enter also submits.
+Each state can still be rendered in isolation by driving `PasscodeEntry`
+directly, which is what the props below are for.
 
 ## Interaction
 
@@ -244,7 +239,7 @@ No Tailwind. Motion values live separately, in
 
 | Token | Value |
 | --- | --- |
-| page | `1512 × 982`, padding `427px 588px` |
+| design frame | `1512 × 982`, component inset `427px 588px` — the live page centres, which reproduces exactly that at frame size |
 | component | `336 × 128`, radius `16`, border `1px` |
 | cell | `84 × 128`, divider `1px` |
 | selected cell | stroke `3px` inside, radius `4`, shadow `0 4px 4px 0 rgba(0,0,0,0.25)` |

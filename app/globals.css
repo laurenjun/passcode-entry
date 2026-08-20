@@ -12,12 +12,6 @@
   --fill-disabled: #f3f2f2;           /* submit state                       */
   --border-disabled: #e4e4e4;         /* submit state                       */
 
-  /* Page */
-  --page-width: 1512px;
-  --page-height: 982px;
-  --page-pad-y: 427px;
-  --page-pad-x: 588px;
-
   /* Passcode entry component: 336 x 128, four 84 x 128 cells */
   --passcode-cells: 4;
   --passcode-cell-width: 84px;
