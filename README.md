@@ -9,7 +9,7 @@ Requires **Node 18.18+** (developed on 24.4). No other tooling, no environment
 variables, no services.
 
 ```bash
-git clone <REPO_URL>
+git clone https://github.com/laurenjun/passcode-entry.git
 cd passcode-entry
 npm install
 npm run dev
