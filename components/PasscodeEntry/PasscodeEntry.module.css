@@ -1,0 +1,164 @@
+/* Passcode entry — static visual states.
+   Every dimension resolves from the tokens declared in app/globals.css. */
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--passcode-font);
+}
+
+/* ---------------------------------------------------------------- *
+ * Passcode entry component — 336 x 128
+ * ---------------------------------------------------------------- */
+
+/* Positioning context for the floating status row, so that adding or
+   removing the label never moves the component itself. */
+.field {
+  position: relative;
+  display: block;
+}
+
+.cells {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--passcode-cells), 1fr);
+  width: calc(var(--passcode-cell-width) * var(--passcode-cells));
+  height: var(--passcode-cell-height);
+  border-radius: var(--passcode-radius);
+  background: var(--fill);
+}
+
+/* 1px border drawn as an inset line so the cell track stays exactly
+   84px wide (a real border would eat 0.5px from the outer cells). */
+.cells::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 var(--passcode-border-width) var(--border);
+  pointer-events: none;
+}
+
+.cells[data-tone="disabled"] {
+  background: var(--fill-disabled);
+}
+
+.cells[data-tone="disabled"]::after {
+  box-shadow: inset 0 0 0 var(--passcode-border-width) var(--border-disabled);
+}
+
+.cell {
+  position: relative;
+  font-family: var(--passcode-font);
+  font-size: var(--passcode-digit-size);
+  font-style: normal;
+  font-weight: var(--passcode-medium);
+  line-height: normal;
+  color: var(--text-color-1);
+  /* Deliberately left at `normal`: Inter's tabular `1` carries a foot serif
+     that the design's proportional `1` does not have. Each cell holds a
+     single centred digit, so tabular figures buy nothing here. */
+  font-variant-numeric: normal;
+}
+
+.cell[data-tone="disabled"] {
+  color: var(--text-color-disabled);
+}
+
+/* Lifted above the border ring so the highlight and its shadow read on top. */
+.cell[data-active="true"] {
+  z-index: 2;
+}
+
+/*
+ * The box that actually animates on digit entry. Keeping it separate from
+ * .cell means the scale never drags the dividers with it.
+ */
+.cellInner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*
+ * 1px divider, centred on the cell boundary. Positioned against the container
+ * rather than the cell so that a cell's entry scale leaves it untouched.
+ */
+.divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--passcode-border-width);
+  transform: translateX(-50%);
+  background: var(--border);
+  pointer-events: none;
+}
+
+.cells[data-tone="disabled"] .divider {
+  background: var(--border-disabled);
+}
+
+/* Selected cell: 3px stroke on the inside, 4px corners, drop shadow. */
+.highlight {
+  position: absolute;
+  inset: 0;
+  border: var(--passcode-highlight-width) solid var(--highlight);
+  border-radius: var(--passcode-highlight-radius);
+  box-shadow: var(--passcode-highlight-shadow);
+  pointer-events: none;
+}
+
+.digit {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+/* ---------------------------------------------------------------- *
+ * Status row
+ * ---------------------------------------------------------------- */
+
+.status {
+  display: flex;
+  align-items: center;
+  /* Height is pinned to the icon so the offset below is measured from the
+     mark rather than from the label's line box. */
+  height: var(--passcode-status-icon);
+  gap: var(--passcode-status-gap);
+  color: var(--text-color-1);
+  white-space: nowrap;
+}
+
+/* Floats above the component without taking part in its layout. */
+.statusFloating {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + var(--passcode-status-offset));
+  transform: translateX(-50%);
+}
+
+.statusIcon {
+  flex: none;
+  display: block;
+  width: var(--passcode-status-icon);
+  height: var(--passcode-status-icon);
+  color: var(--highlight);
+}
+
+/* The mark is wrapped so the rotation has a box of its own to turn in. */
+.statusIcon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.statusLabel {
+  font-size: var(--passcode-label-size);
+  font-weight: var(--passcode-medium);
+  line-height: 1;
+  color: var(--text-color-1);
+}

@@ -1,0 +1,64 @@
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ * ------------------------------------------------------------------ */
+:root {
+  /* Colour styles */
+  --background: #ffffff;
+  --border: #e4e4e4;                  /* passcode entry component border   */
+  --fill: #fafafa;                    /* passcode entry component fill      */
+  --highlight: #107a4d;               /* selected cell                      */
+  --text-color-1: #323232;
+  --text-color-disabled: #858585;     /* submit state                       */
+  --fill-disabled: #f3f2f2;           /* submit state                       */
+  --border-disabled: #e4e4e4;         /* submit state                       */
+
+  /* Page */
+  --page-width: 1512px;
+  --page-height: 982px;
+  --page-pad-y: 427px;
+  --page-pad-x: 588px;
+
+  /* Passcode entry component: 336 x 128, four 84 x 128 cells */
+  --passcode-cells: 4;
+  --passcode-cell-width: 84px;
+  --passcode-cell-height: 128px;
+  --passcode-radius: 16px;
+  --passcode-border-width: 1px;
+
+  /* Selected cell */
+  --passcode-highlight-width: 3px;    /* stroke sits on the inside          */
+  --passcode-highlight-radius: 4px;
+  --passcode-highlight-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+  /* Status row */
+  --passcode-status-icon: 32px;
+  --passcode-status-gap: 8px;         /* icon -> text                       */
+  --passcode-status-offset: 16px;     /* text -> passcode entry component   */
+
+  /* Typography */
+  --passcode-font: var(--font-inter), "Inter", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --passcode-digit-size: 36px;
+  --passcode-label-size: 24px;
+  --passcode-medium: 500;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-color-1);
+  font-family: var(--passcode-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

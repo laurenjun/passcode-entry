@@ -1,0 +1,10 @@
+/* Live page. The design frame is 1512 x 982 with the component inset
+   588/427; centring reproduces exactly that at frame size and stays put at
+   any other viewport. */
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--background);
+}
