@@ -82,7 +82,12 @@ function makeReducer({ autoSubmit }: ReducerConfig) {
          guard — Enter during the verify delay is a no-op. */
       case "submit": {
         if (state.phase !== "entry") return state;
-        if (state.digits.some((d) => d === "")) return state;
+        /* Too early: shake, but stay in `entry`. An incomplete code is not a
+           wrong one, so the digits and the focused cell are left alone and the
+           user can just keep typing. */
+        if (state.digits.some((d) => d === "")) {
+          return { ...state, shakeToken: state.shakeToken + 1 };
+        }
         return { ...state, phase: "submitting" };
       }
 

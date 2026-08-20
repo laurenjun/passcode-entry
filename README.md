@@ -52,6 +52,7 @@ the cells stay presentational.
 | --- | --- |
 | digits `0-9` only | `handleKeyDown` swallows every other printable key |
 | Enter submits | `submit` action |
+| Enter too early shakes | `submit` action, incomplete branch |
 | the fourth digit submits on its own | `land()`, inside the same update that writes the digit |
 | typing advances focus | `insert` action |
 | pasting fills from the focused cell on | `handlePaste` → `insert` |
@@ -166,8 +167,11 @@ springs under `AMPLITUDE`. The alternative was hardcoding them in components.
 
 These are the places the rules ran out. All are one-liners to change:
 
-- **Enter with an incomplete code is ignored.** There is no error state in the
-  design, so nothing is shown.
+- **Enter with an incomplete code shakes but keeps what you typed.** It stays
+  in `entry` rather than running the full error sequence: an incomplete code is
+  not a wrong one, so clearing four cells because someone pressed Enter a beat
+  early would destroy input for no reason. Change the incomplete branch of
+  `submit` to set `phase: "error"` if you want the hold-and-clear too.
 - **A wrong code** shakes, holds the wrong digits for `ERROR_HOLD_MS`, clears
   them, and returns focus to the first cell.
 - **The highlight is a focus affordance**: it shows only while the field has
